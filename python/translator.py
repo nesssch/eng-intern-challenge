@@ -54,11 +54,16 @@ def convert_e_to_b(text):
     """Converts input text in English to its corresponding Braille text"""
     braille = ""
     for char in text:
-        if char.iscap():
+        if char.isupper():
             braille = braille + ".....O"
-        braille_char = ENG_TO_BRAILLE[char]
+            braille_char = ENG_TO_BRAILLE[char.lower()]
+        else:
+            braille_char = char
         braille = braille + braille_char
-    return braille_char
+    return braille
+
+print(convert_e_to_b("Hello world"))
+
 
 
 
