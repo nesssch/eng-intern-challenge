@@ -50,6 +50,15 @@ ENG_TO_BRAILLE = { #converts English characters to Braille
     " ": "......"
 }
 
+BRAILLE_TO_ENG_LET = {}
+BRAILLE_TO_ENG_NUM = {}
+
+for key, value in ENG_TO_BRAILLE.items():
+    if key.isalpha():
+        BRAILLE_TO_ENG_LET[value] = key
+    else:
+        BRAILLE_TO_ENG_NUM[value] = key
+
 def convert_e_to_b(text):
     """Converts input text in English to its corresponding Braille text"""
     braille = ""
@@ -58,11 +67,11 @@ def convert_e_to_b(text):
             braille = braille + ".....O"
             braille_char = ENG_TO_BRAILLE[char.lower()]
         else:
-            braille_char = char
+            braille_char = ENG_TO_BRAILLE[char]
         braille = braille + braille_char
     return braille
 
-print(convert_e_to_b("Hello world"))
+
 
 
 
