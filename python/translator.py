@@ -53,7 +53,7 @@ ENG_TO_BRAILLE = { #converts English characters to Braille
 BRAILLE_TO_ENG_LET = {}
 BRAILLE_TO_ENG_NUM = {}
 
-for key, value in ENG_TO_BRAILLE.items():
+for key, value in ENG_TO_BRAILLE.items(): #Fills Braille dictionaries
     if key.isalpha():
         BRAILLE_TO_ENG_LET[value] = key
     else:
@@ -70,6 +70,36 @@ def convert_e_to_b(text):
             braille_char = ENG_TO_BRAILLE[char]
         braille = braille + braille_char
     return braille
+
+def b_lookup (b_char, is_cap, is_num):
+    """great documentation"""
+    if is_num:
+        return BRAILLE_TO_ENG_NUM[b_char]
+    e_char = BRAILLE_TO_ENG_LET[b_char]
+    if is_cap:
+        return e_char.upper()
+    return e_char
+
+def convert_b_to_e(text):
+    """Converts input text in Braille to its corresponding English text"""
+    english = ""
+    is_cap = False
+    is_num = False
+    for i in range(0, len(text), 6):
+        b_char = text[i:i+6]
+        if b_char == ".....O":
+            is_cap = True
+        if b_char == ".O.OOO":
+            is_num = True
+
+        else:
+            e_char = b_lookup(b_char, is_cap, is_num)
+            english = english + e_char
+
+        if b_char == "......":
+            is_num = False
+        is_cap = False
+
 
 
 
