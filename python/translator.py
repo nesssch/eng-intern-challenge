@@ -54,10 +54,17 @@ BRAILLE_TO_ENG_LET = {}
 BRAILLE_TO_ENG_NUM = {}
 
 for key, value in ENG_TO_BRAILLE.items(): #Fills Braille dictionaries
-    if key.isalpha():
+    if key.isalpha() or key == " ":
         BRAILLE_TO_ENG_LET[value] = key
     else:
         BRAILLE_TO_ENG_NUM[value] = key
+
+def is_braille(text):
+    """Returns 1 if the text is braille, 0 otherwise"""
+    for char in text:
+        if char != "0" and char != ".":
+            return 0
+    return 1
 
 def convert_e_to_b(text):
     """Converts input text in English to its corresponding Braille text"""
@@ -75,8 +82,10 @@ def b_lookup (b_char, is_cap, is_num):
     """great documentation"""
     if is_num:
         return BRAILLE_TO_ENG_NUM[b_char]
+   
     e_char = BRAILLE_TO_ENG_LET[b_char]
     if is_cap:
+        #print("Capital " + e_char.upper())
         return e_char.upper()
     return e_char
 
@@ -87,19 +96,23 @@ def convert_b_to_e(text):
     is_num = False
     for i in range(0, len(text), 6):
         b_char = text[i:i+6]
+        #print("b_char = " + b_char)
         if b_char == ".....O":
+            #print("Capital, just capital!")
             is_cap = True
-        if b_char == ".O.OOO":
+        elif b_char == ".O.OOO":
             is_num = True
-
         else:
+           # print("looking up b_char" + b_char)
             e_char = b_lookup(b_char, is_cap, is_num)
             english = english + e_char
+            is_cap = False
 
         if b_char == "......":
             is_num = False
-        is_cap = False
+    return english
 
+print(convert_b_to_e(".....OO.....O.O...OO...........O.OOOO.....O.O...OO...."))
 
 
 
