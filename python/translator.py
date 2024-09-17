@@ -75,14 +75,13 @@ def convert_e_to_b(text):
         if char.isupper():
             braille = braille + ".....O"
             braille_char = ENG_TO_BRAILLE[char.lower()]
-        elif char.isnumeric() and not wasnum:
-            braille = braille + ".O.OOO"
-            braille_char = ENG_TO_BRAILLE[char]
-            wasnum = True
         else:
-            braille_char = ENG_TO_BRAILLE[char]
+            if char.isnumeric() and not wasnum:
+                braille = braille + ".O.OOO"
+                wasnum = True
             if char == " ":
                 wasnum = False
+            braille_char = ENG_TO_BRAILLE[char]
         braille = braille + braille_char
     return braille
 
