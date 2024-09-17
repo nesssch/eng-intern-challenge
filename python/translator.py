@@ -51,9 +51,8 @@ ENG_TO_BRAILLE = { #converts English characters to Braille
     ")": ".O.OO.",
     " ": "......"
 }
-
 BRAILLE_TO_ENG_LET = {} #converts Braille characters to English numbers
-BRAILLE_TO_ENG_NUM = {} #converts Braille characters to English lowercase letters
+BRAILLE_TO_ENG_NUM = {} #converts Braille characters to English lowercase letters, including space
 
 for key, value in ENG_TO_BRAILLE.items(): #Fills Braille dictionaries
     if key.isalpha() or key == " ":
@@ -71,12 +70,19 @@ def is_braille(text):
 def convert_e_to_b(text):
     """Converts input text in English to its corresponding Braille text"""
     braille = ""
+    wasnum = False
     for char in text:
         if char.isupper():
             braille = braille + ".....O"
             braille_char = ENG_TO_BRAILLE[char.lower()]
+        elif char.isnumeric() and not wasnum:
+            braille = braille + ".O.OOO"
+            braille_char = ENG_TO_BRAILLE[char]
+            wasnum = True
         else:
             braille_char = ENG_TO_BRAILLE[char]
+            if char == " ":
+                wasnum = False
         braille = braille + braille_char
     return braille
 
@@ -104,19 +110,20 @@ def convert_b_to_e(text):
             is_cap = True
         elif b_char == ".O.OOO":
             is_num = True
-        elif b_char == "......":
-            is_num = False
         else:
-           # print("looking up b_char" + b_char)
+            if b_char == "......":
+                is_num = False
             e_char = b_lookup(b_char, is_cap, is_num)
             english = english + e_char
+            
             is_cap = False
+
     return english
 
 def main():
-    text = sys.argv[1]
+    text = " ".join(sys.argv[1:])
     if is_braille(text):
         return convert_b_to_e(text)
     return convert_e_to_b(text) 
 
-print(main())
+sys.stdout.write(main())
